@@ -36,5 +36,14 @@ trait ImageUploadTrait
             return $path . '/' . $imageName;
         }
     }
-}
 
+    /**
+     * Handle delete image
+     */
+    public function deleteImage($path)
+    {
+        if (File::exists(public_path($path))) {
+            File::delete(public_path($path));
+        }
+    }
+}
