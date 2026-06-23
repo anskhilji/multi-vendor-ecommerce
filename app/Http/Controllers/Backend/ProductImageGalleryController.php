@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\DataTables\ProductDataTable;
+use App\DataTables\ImageGalleryDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductImageGallery;
@@ -15,7 +15,7 @@ class ProductImageGalleryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, ProductDataTable $datatable)
+    public function index(Request $request, ImageGalleryDataTable $datatable)
     {
         $product = Product::findOrFail(($request->product));
         return $datatable->render('admin.product.image-gallery.index', compact('product'));
@@ -83,6 +83,10 @@ class ProductImageGalleryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $productImage = ProductImageGallery::findOrFail($id);
+        $this->deleteImage($productImage->image);
+        $productImage->delete();
+
+        return response(['status' => 'success', 'message' => 'Deleted successfully']);
     }
 }

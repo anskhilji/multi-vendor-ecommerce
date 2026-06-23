@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Product;
+use Auth;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -25,19 +26,18 @@ class ProductDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 $editBtn = "<a href='" . route('admin.products.edit', $query->id) . "' class='btn btn-primary'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='" . route('admin.products.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='fas fa-trash-alt'></i></a>";
-                $moreBtn = '<div class="dropdown dropleft d-inline show">
-                      <button class="btn btn-primary dropdown-toggle ml-2" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="fas fa-cog"></i>
-                      </button>
-                      <div class="dropdown-menu show" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item has-icon" href="' . route('admin.products-image-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
-                        <a class="dropdown-item has-icon" href="#"><i class="far fa-file"></i> Another action</a>
-                        <a class="dropdown-item has-icon" href="#"><i class="far fa-clock"></i> Something else here</a>
-                      </div>
-                    </div>';
+                $moreBtn = '<div class="dropdown dropleft d-inline">
+                            <button class="btn btn-primary dropdown-toggle ml-2" type="button" id="dropdownMenuButton_' . $query->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item has-icon" href="' . route('admin.products-image-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
+                                <a class="dropdown-item has-icon" href="' . route('admin.products-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Variants</a>
+                            </div>
+                        </div>';
                 return "<div class='d-flex'>" . $editBtn . $deleteBtn . $moreBtn . "</div>";
             })
-            ->addColumn('image', function ($query) {
+            ->addColumn('image', function ($query)  {
                 return "<img width='70px' src='" . asset($query->thumb_image) . "' />";
             })
             ->addColumn('type', function ($query) {
@@ -71,7 +71,7 @@ class ProductDataTable extends DataTable
      */
     public function query(Product $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->where('vendor_id', Auth::user()->vendor->id)->newQuery();
     }
 
     /**
@@ -84,7 +84,7 @@ class ProductDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy(0)
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -103,7 +103,7 @@ class ProductDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('image'),
+            Column::make('image')->width(150),
             Column::make('name'),
             Column::make('price'),
             Column::make('type')->width(150),

@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\ImageGallery;
+use App\Models\ProductImageGallery;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -22,16 +22,23 @@ class ImageGalleryDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'imagegallery.action')
+            ->addColumn('action', function ($query) {
+                $deleteBtn = "<a href='" . route('admin.products-image-gallery.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='fas fa-trash-alt'></i></a>";
+                return "<div class='d-flex'>" . $deleteBtn . "</div>";
+            })
+             ->addColumn('image', function ($query) {
+                return $img = "<img width='200px' src='" . asset($query->image ) . "' ></img>";
+            })
+            ->rawColumns(['image', 'action'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(ImageGallery $model): QueryBuilder
+    public function query(ProductImageGallery $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->where('product_id', request()->product)->newQuery();
     }
 
     /**
@@ -62,15 +69,14 @@ class ImageGalleryDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+
+            Column::make('id')->width(100),
+            Column::make('image'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
-                  ->width(60)
+                  ->width(400)
                   ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
         ];
     }
 
