@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -55,7 +56,7 @@
   ==============================-->
 
 
-    <!--============================ 
+    <!--============================
       SCROLL BUTTON START
     ==============================-->
     <div class="wsus__scroll_btn">
@@ -101,6 +102,9 @@
     <!--classycountdown js-->
     <script src="{{ asset('frontend/js/jquery.classycountdown.js') }}"></script>
 
+    <!--sweetalert2 js-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!--main/custom js-->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
 
@@ -111,6 +115,59 @@
                 toastr.error('{{ $error }}');
             @endforeach
         @endif
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('body').on('click', '.delete-item', function(event) {
+                event.preventDefault();
+
+                let deleteUrl = $(this).attr('href');
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: deleteUrl,
+                            success: function(data) {
+                                if (data.status == 'success') {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: data.message,
+                                    });
+
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 1000);
+
+                                } else if (data.status == 'error') {
+                                    Swal.fire({
+                                        title: "Cant't delete!",
+                                        text: data.message,
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.log(error);
+                            }
+                        })
+                    }
+                });
+            })
+        })
     </script>
 </body>
 
