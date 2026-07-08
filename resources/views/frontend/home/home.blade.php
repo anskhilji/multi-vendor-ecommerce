@@ -1,5 +1,9 @@
 @extends('frontend.layouts.master')
 
+@section('title')
+    {{ $settings->site_name }} - eCommerce HTML Page
+@endsection
+
 @section('content')
     <!--==========================  PRODUCT MODAL VIEW START ===========================-->
     <section class="product_popup_modal">

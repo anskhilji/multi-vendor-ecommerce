@@ -1,4 +1,7 @@
 @extends('vendor.layouts.master')
+@section('title')
+    {{ $settings->site_name }} - User Profile
+@endsection
 @section('content')
     <!--============================= DASHBOARD START ==============================-->
     <section id="wsus__dashboard">
@@ -84,6 +87,6 @@
         </div>
     </section>
     <!--=============================
-                                                                                                                                                    DASHBOARD START
-                                                                                                                                                  ==============================-->
+                                                                                                                                                        DASHBOARD START
+                                                                                                                                                      ==============================-->
 @endsection

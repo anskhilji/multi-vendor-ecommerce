@@ -1,9 +1,11 @@
 @extends('frontend.layouts.master')
-
+@section('title')
+    {{ $settings->site_name }} - Login
+@endsection
 @section('content')
     <!--============================
-                                                                                                                                             BREADCRUMB START
-                                                                                                                                        ==============================-->
+                                                                                                                                                 BREADCRUMB START
+                                                                                                                                            ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
