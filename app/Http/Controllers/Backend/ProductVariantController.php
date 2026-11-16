@@ -45,10 +45,9 @@ class ProductVariantController extends Controller
         $varinat->status = $request->status;
         $varinat->save();
 
-       flash()->success('Created successfully!');
+        flash()->success('Created successfully!');
 
         return redirect()->route('admin.products-variant.index', ['product' => $request->product]);
-
     }
 
     /**

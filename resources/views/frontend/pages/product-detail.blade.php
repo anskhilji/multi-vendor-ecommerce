@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--==========================
-                                                                                                                                                                                                                                                                                                                                  PRODUCT MODAL VIEW START
-                                                                                                                                                                                                                                                                                                                                ===========================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              PRODUCT MODAL VIEW START
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ===========================-->
     <section class="product_popup_modal">
         <div class="modal fade" id="exampleModal2" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -143,13 +143,13 @@
         </div>
     </section>
     <!--==========================
-                                                                                                                                                                                                                                                                                                                                  PRODUCT MODAL VIEW END
-                                                                                                                                                                                                                                                                                                                                ===========================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              PRODUCT MODAL VIEW END
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ===========================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                                                                                    BREADCRUMB START
-                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                BREADCRUMB START
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -167,13 +167,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                                                                                    BREADCRUMB END
-                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                BREADCRUMB END
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                                                                                    PRODUCT DETAILS START
-                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                PRODUCT DETAILS START
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
     <section id="wsus__product_details">
         <div class="container">
             <div class="wsus__details_bg">
@@ -232,39 +232,42 @@
                             </p>
                             <p class="description">{!! $product->short_description !!}</p>
 
-                            <div class="wsus__selectbox">
-                                <div class="row">
-                                    @foreach ($product->variants as $variant)
-                                        <div class="col-xl-6 col-sm-6">
-                                            <h5 class="mb-2">{{ $variant->name }}</h5>
-                                            <select class="select_2" name="state">
-                                                @foreach ($variant->productVariantItems as $variantItem)
-                                                    <option value="{{ $variantItem->id }}" @selected($variantItem->is_default == 1)>
-                                                        {{ $variantItem->name }} (${{ $variantItem->price }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    @endforeach
+                            <form class="shopping-cart-form">
+                                <div class="wsus__selectbox">
+                                    <div class="row">
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        @foreach ($product->variants as $variant)
+                                            <div class="col-xl-6 col-sm-6">
+                                                <h5 class="mb-2">{{ $variant->name }}</h5>
+                                                <select class="select_2" name="variants_items[]">
+                                                    @foreach ($variant->productVariantItems as $variantItem)
+                                                        <option value="{{ $variantItem->id }}"
+                                                            @selected($variantItem->is_default == 1)>
+                                                            {{ $variantItem->name }} (${{ $variantItem->price }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        @endforeach
 
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="wsus__quentity">
-                                <h5>quentity :</h5>
-                                <form class="select_number">
-                                    <input class="number_area" type="text" min="1" max="100"
-                                        value="1" />
-                                </form>
+                                <div class="wsus__quentity">
+                                    <h5>quentity :</h5>
+                                    <div class="select_number">
+                                        <input class="number_area" name="qty" type="text" min="1"
+                                            max="100" value="1" />
+                                    </div>
+                                </div>
 
-                            </div>
-
-                            <ul class="wsus__button_area">
-                                <li><a class="add_cart" href="#">add to cart</a></li>
-                                <li><a class="buy_now" href="#">buy now</a></li>
-                                <li><a href="#"><i class="fal fa-heart"></i></a></li>
-                                <li><a href="#"><i class="far fa-random"></i></a></li>
-                            </ul>
+                                <ul class="wsus__button_area">
+                                    <li><button type="submit" class="add_cart" href="#">add to cart</button></li>
+                                    <li><a class="buy_now" href="#">buy now</a></li>
+                                    <li><a href="#"><i class="fal fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="far fa-random"></i></a></li>
+                                </ul>
+                            </form>
 
                             <p class="brand_model"><span>brand :</span> {{ $product->brand->name }}</p>
                         </div>
@@ -560,7 +563,7 @@
 
 
     <!--============================  RELATED PRODUCT START ==============================-->
-    <section id="wsus__flash_sell">
+    {{-- <section id="wsus__flash_sell">
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
@@ -721,8 +724,8 @@
 
             </div>
         </div>
-    </section>
+    </section> --}}
     <!--============================
-                                                                                                                                                                                                                                                                                                                                    RELATED PRODUCT END
-                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                RELATED PRODUCT END
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ==============================-->
 @endsection
